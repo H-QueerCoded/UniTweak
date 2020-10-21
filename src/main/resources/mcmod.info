@@ -1,0 +1,16 @@
+[
+{
+  "modid": "${mod_id}",
+  "name": "${name}",
+  "description": "Adds CraftTweaker methods for patterned mod recipes. Supports: IE",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["HoganDazs"],
+  "credits": "Forge, UniDict API, CraftTweaker",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": [UniDict, CraftTweaker]
+}
+]
