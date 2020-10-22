@@ -17,12 +17,12 @@ import wanion.unidict.api.*;
 import wanion.unidict.resource.Resource;
 
 @ModOnly("immersiveengineering")
-@ZenClass("unitweak.ie")
+@ZenClass("mods.unitweak.ie")
 @ZenRegister
 public class ImmersiveEngineering {
 	
 	@ZenMethod
-	public static void pressRecipe(String outputKind, @Optional("1") int outCount, String inputKind, IItemStack mold, int energy, @Optional int inputSize) {
+	public static void pressRecipe(String outputKind, String inputKind, IItemStack mold, int energy, @Optional int inputSize, @Optional("1") int outCount) {
 		CraftTweakerAPI.apply(new pressRecipe(outputKind, outCount, inputKind, mold, energy, inputSize));
 	}
 	
