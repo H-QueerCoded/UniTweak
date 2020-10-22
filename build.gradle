@@ -88,7 +88,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     compileOnly  "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.554"
     compileOnly  "blusunrize:ImmersiveEngineering:0.12-92-559"
-    compileOnly name: "UniDict-1.12.2-1.3b-dev"
+    compileOnly name: "UniDict-1.12.2-2.9.8-dev"
 
 }
 

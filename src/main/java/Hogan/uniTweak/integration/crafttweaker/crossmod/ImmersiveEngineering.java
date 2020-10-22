@@ -32,8 +32,9 @@ public class ImmersiveEngineering {
 		ItemStack mold;
 
 		public pressRecipe(String outputKind, int outCount, String inputKind, IItemStack mold, int energy, int inputSize) {
-			input = Resource.getKindOfName(inputKind);
-			output = Resource.getKindOfName(outputKind);
+			CraftTweakerAPI.logInfo("inputKind: "+inputKind);
+			input = Resource.getKindFromName(inputKind);
+			output = Resource.getKindFromName(outputKind);
 			this.mold=CraftTweakerMC.getItemStack(mold);
 			inNum=inputSize;
 			outNum=outCount;
@@ -43,6 +44,7 @@ public class ImmersiveEngineering {
 		public void apply() {
 			UniDictAPI uniDictAPI = UniDict.getAPI();
 			List<Resource> inAndOut = uniDictAPI.getResources(input, output);
+			CraftTweakerAPI.logInfo("List length: "+inAndOut.size());
 			
 			for(Resource resource : inAndOut) {
 				ItemStack outStack = resource.getChild(output).getMainEntry(outNum);
@@ -54,7 +56,7 @@ public class ImmersiveEngineering {
 
 		@Override
 		public String describe() {
-			return "Trying to create patterned Metal Press recipe for "+Resource.getNameOfKind(input)+" to "+Resource.getNameOfKind(output);
+			return "Trying to create patterned Metal Press recipe for "+Resource.getNameFromKind(input)+" to "+Resource.getNameFromKind(output);
 		}
 		
 	}
