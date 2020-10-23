@@ -11,7 +11,6 @@ import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import blusunrize.immersiveengineering.api.crafting.MetalPressRecipe;
-import wanion.unidict.UniDict;
 import wanion.unidict.api.*;
 import wanion.unidict.resource.Resource;
 
