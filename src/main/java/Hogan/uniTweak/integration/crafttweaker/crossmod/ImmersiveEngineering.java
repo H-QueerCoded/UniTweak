@@ -26,12 +26,18 @@ import javax.annotation.Nonnull;
 public class ImmersiveEngineering {
 	
 	private static final List<pressRecipe> NEW_PRESS_RECIPE_TEMPLATE_LIST = new ArrayList<>();
+	private static final List<removePressByKind> REMOVAL_BY_KIND_LIST = new ArrayList<>();
 	
 	@ZenMethod
 	public static void pressRecipe(String outputKind, String inputKind, IItemStack mold, int energy, @Optional("1") int outCount, @Optional("1") int inputSize) {
 		outCount = (outCount==0)? 1 : outCount;
 		inputSize = (inputSize==0)? 1 : inputSize;
 		CraftTweakerAPI.apply(new pressRecipe(outputKind, inputKind, mold, energy, outCount, inputSize));
+	}
+	
+	@ZenMethod
+	public static void removePressByKind(String outputKind) {
+		CraftTweakerAPI.apply(new removePressByKind(outputKind));
 	}
 	
 	public static class pressRecipe implements IAction{
@@ -61,13 +67,36 @@ public class ImmersiveEngineering {
 		
 	}
 	
+	public static class removePressByKind implements IAction{
+		
+		String kind;
+		
+		public removePressByKind(String outputKind) {
+			kind=outputKind;
+		}
+
+		@Override
+		public void apply() {
+			REMOVAL_BY_KIND_LIST.add(this);
+		}
+
+		@Override
+		public String describe() {
+			return "UniTweak: Removing all Metal Press recipes with output of kind: "+kind;
+		}
+	}
+	
 	public static void postInit(){
-		final UniDictAPI uniDictAPI = NEW_PRESS_RECIPE_TEMPLATE_LIST.size()>0 ? UniDict.getAPI() : null;
+		final UniDictAPI uniDictAPI = NEW_PRESS_RECIPE_TEMPLATE_LIST.size()>0||REMOVAL_BY_KIND_LIST.size()>0 ? UniDict.getAPI() : null;
 		if(uniDictAPI == null) {
 			return;
 		}
-		registerPressRecipeTemplates(uniDictAPI);
-		
+		if(REMOVAL_BY_KIND_LIST.size()>0) {
+			removePressRecipes(uniDictAPI);
+		}
+		if(NEW_PRESS_RECIPE_TEMPLATE_LIST.size()>0) {
+			registerPressRecipeTemplates(uniDictAPI);
+		}
 	}
 	
 	private static void registerPressRecipeTemplates(@Nonnull final UniDictAPI uniDictAPI) {
@@ -81,6 +110,19 @@ public class ImmersiveEngineering {
 				ItemStack inStack = resource.getChild(input).getMainEntry(template.inNum);
 				CraftTweakerAPI.logInfo("UniTweak: Adding metal press recipe for "+inStack.getCount()+" "+inStack.getDisplayName()+" to "+outStack.getCount()+" "+outStack.getDisplayName());
 				MetalPressRecipe.addRecipe(outStack, inStack, template.mold, template.energy);
+			}
+		}
+	}
+	
+	private static void removePressRecipes(@Nonnull final UniDictAPI uniDictAPI) {
+		for (removePressByKind removal : REMOVAL_BY_KIND_LIST) {
+			int kind = Resource.getKindFromName(removal.kind);
+			List<Resource> list = uniDictAPI.getResources(kind);
+			
+			for(Resource resource : list) {
+				ItemStack output = resource.getChild(kind).getMainEntry();
+				CraftTweakerAPI.logInfo("UniTweak: Removing Metal Press recipes with output "+output.getDisplayName());
+				MetalPressRecipe.removeRecipes(output);
 			}
 		}
 	}
