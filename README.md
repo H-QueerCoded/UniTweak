@@ -3,6 +3,6 @@ UniTweak is a Minecraft mod that adds CraftTweaker methods which can create reci
 
 It does this using the UniDict API.
 
-UniTweak requires both CraftTweaker and UniDict. Currently supported mods are: Immersive Engineering
+UniTweak requires both CraftTweaker and UniDict. Currently supported mods are: Immersive Engineering, Embers Rekindled
 
 See the wiki for methods and usage examples
