@@ -1,6 +1,6 @@
 package Hogan.uniTweak;
 
-import Hogan.uniTweak.integration.crafttweaker.crossmod.ImmersiveEngineering;
+import Hogan.uniTweak.integration.crafttweaker.CraftTweaker;;
 
 public class commonProxy {
 	
@@ -13,6 +13,6 @@ public class commonProxy {
 	};
 	
 	public void postInit() {
-		ImmersiveEngineering.postInit();
+		CraftTweaker.postInit();
 	};
 }

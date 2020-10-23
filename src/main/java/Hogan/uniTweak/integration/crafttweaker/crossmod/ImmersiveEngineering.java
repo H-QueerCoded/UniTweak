@@ -29,9 +29,7 @@ public class ImmersiveEngineering {
 	private static final List<removePressByKind> REMOVAL_BY_KIND_LIST = new ArrayList<>();
 	
 	@ZenMethod
-	public static void pressRecipe(String outputKind, String inputKind, IItemStack mold, int energy, @Optional("1") int outCount, @Optional("1") int inputSize) {
-		outCount = (outCount==0)? 1 : outCount;
-		inputSize = (inputSize==0)? 1 : inputSize;
+	public static void pressRecipe(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize) {
 		CraftTweakerAPI.apply(new pressRecipe(outputKind, inputKind, mold, energy, outCount, inputSize));
 	}
 	
@@ -86,11 +84,7 @@ public class ImmersiveEngineering {
 		}
 	}
 	
-	public static void postInit(){
-		final UniDictAPI uniDictAPI = NEW_PRESS_RECIPE_TEMPLATE_LIST.size()>0||REMOVAL_BY_KIND_LIST.size()>0 ? UniDict.getAPI() : null;
-		if(uniDictAPI == null) {
-			return;
-		}
+	public static void postInit(@Nonnull final UniDictAPI uniDictAPI){
 		if(REMOVAL_BY_KIND_LIST.size()>0) {
 			removePressRecipes(uniDictAPI);
 		}
