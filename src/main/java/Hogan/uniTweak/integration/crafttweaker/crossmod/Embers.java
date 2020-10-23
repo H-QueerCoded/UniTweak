@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import stanhebben.zenscript.annotations.NotNull;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -31,7 +32,7 @@ public class Embers {
 	private static final List<stamperAdd> NEW_STAMPER_RECIPES = new ArrayList<>();
 	
 	@ZenMethod
-	public static void stamperAdd(String output, IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
+	public static void stamperAdd(String output,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
 		CraftTweakerAPI.apply(new stamperAdd(output,stamp,liquidAmount,outputSize,input));
 	}
 	
