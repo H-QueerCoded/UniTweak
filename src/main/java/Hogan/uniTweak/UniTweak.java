@@ -1,6 +1,5 @@
 package Hogan.uniTweak;
 
-import Hogan.uniTweak.integration.crafttweaker.crossmod.ImmersiveEngineering;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -17,7 +16,7 @@ public class UniTweak
     @Mod.Instance
     public static UniTweak instance;
     
-    @SidedProxy(clientSide = "Hogan.uniTweak.clientProxy", serverSide = "Hogan.uniTweak.serverProxy")
+    @SidedProxy(clientSide = "Hogan.uniTweak.clientProxy", serverSide = "Hogan.uniTweak.commonProxy")
     public static commonProxy proxy;
 
     @EventHandler
@@ -30,7 +29,6 @@ public class UniTweak
     public void init(FMLInitializationEvent event)
     {
     	proxy.init();
-    	ImmersiveEngineering.init();
     }
     
     @EventHandler
