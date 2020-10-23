@@ -120,9 +120,11 @@ public class ImmersiveEngineering {
 			List<Resource> list = uniDictAPI.getResources(kind);
 			
 			for(Resource resource : list) {
-				ItemStack output = resource.getChild(kind).getMainEntry();
-				CraftTweakerAPI.logInfo("UniTweak: Removing Metal Press recipes with output "+output.getDisplayName());
-				MetalPressRecipe.removeRecipes(output);
+				List<ItemStack> outputList = resource.getChild(kind).getEntries();
+				for (ItemStack output : outputList) {
+					CraftTweakerAPI.logInfo("UniTweak: Removing Metal Press recipes with output "+output.getDisplayName());
+					MetalPressRecipe.removeRecipes(output);
+				}
 			}
 		}
 	}
