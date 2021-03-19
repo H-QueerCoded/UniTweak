@@ -129,7 +129,7 @@ public class Embers {
 			for(Resource resource : list) {
 				List<ItemStack> outputList = resource.getChild(kind).getEntries();
 				for (ItemStack output : outputList) {
-					CraftTweakerAPI.logInfo("UniTweak: Removing Metal Press recipes with output "+output.getDisplayName());
+					CraftTweakerAPI.logInfo("UniTweak: Removing Stamper recipes with output "+output.getDisplayName());
 					RecipeRegistry.stampingRecipes.removeAll(getRecipesByOutput(output));
 				}
 			}

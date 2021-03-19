@@ -45,6 +45,8 @@ dependencies {
 	deobfCompile	"CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.554"
     deobfCompile	"blusunrize:ImmersiveEngineering:0.12-92-559"
     deobfCompile 	"curse.maven:embers-rekindled:3010691"
+    //deobfCompile 	"slimeknights.mantle:Mantle:1.12-<mantle_build>"
+    //deobfCompile 	"slimeknights:TConstruct:1.12.2-<tic_build>"
     deobfProvided  	"curse.maven:unidict:3087800" //dev jar
     runtime			"curse.maven:unidict:3087799" //normal jar
     runtime			"curse.maven:wanionlib:3064112"
