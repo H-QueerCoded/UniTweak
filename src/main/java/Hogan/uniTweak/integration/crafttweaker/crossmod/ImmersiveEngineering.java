@@ -218,7 +218,6 @@ public class ImmersiveEngineering {
 				for (ItemStack input : inputList) {
 					CrusherRecipe r = CrusherRecipe.findRecipe(input);
 					if(r != null) {
-						CraftTweakerAPI.logInfo("Cruhser recipe found for "+input.getDisplayName()+" to "+r.output.getDisplayName());
 						List<ItemStack> outputList = resource.getChild(outputKind).getEntries();
 						for (ItemStack output : outputList) {
 							if(ItemStack.areItemsEqual(r.output, output)) {
