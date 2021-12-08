@@ -96,8 +96,8 @@ public class ImmersiveEngineering {
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int kind = Resource.getKindFromName(kind);
-			List<Resource> list = uniDictAPI.getResources(kind);
+			int kindNum = Resource.getKindFromName(kind);
+			List<Resource> list = uniDictAPI.getResources(kindNum);
 			
 			for(Resource resource : list) {
 				List<ItemStack> outputList = resource.getChild(kind).getEntries();
