@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'eclipse'
 
 version = "${mod_version}"
-group = "hogan.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "h2steffes.${mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'UniTweak'
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.

@@ -1,6 +1,6 @@
-package Hogan.uniTweak.integration.crafttweaker;
+package h2steffes.uniTweak.integration.crafttweaker;
 
-import Hogan.uniTweak.integration.crafttweaker.crossmod.*;
+import h2steffes.uniTweak.integration.crafttweaker.crossmod.*;
 import wanion.unidict.UniDict;
 import wanion.unidict.api.UniDictAPI;
 

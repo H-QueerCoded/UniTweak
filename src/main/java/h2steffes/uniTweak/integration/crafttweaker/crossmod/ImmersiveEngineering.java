@@ -1,4 +1,4 @@
-package Hogan.uniTweak.integration.crafttweaker.crossmod;
+package h2steffes.uniTweak.integration.crafttweaker.crossmod;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
@@ -6,6 +6,7 @@ import crafttweaker.annotations.ModOnly;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.mc1120.CraftTweaker;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -33,22 +34,22 @@ public class ImmersiveEngineering {
 	
 	@ZenMethod
 	public static void pressRecipe(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize) {
-		CraftTweakerAPI.apply(new pressRecipe(outputKind, inputKind, mold, energy, outCount, inputSize));
+		CraftTweaker.LATE_ACTIONS.add(new pressRecipe(outputKind, inputKind, mold, energy, outCount, inputSize));
 	}
 	
 	@ZenMethod
 	public static void removePressByOutputKind(String outputKind) {
-		CraftTweakerAPI.apply(new removePressByOutputKind(outputKind));
+		CraftTweaker.LATE_ACTIONS.add(new removePressByOutputKind(outputKind));
 	}
 	
 	@ZenMethod
 	public static void crusherTemplate(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
-		CraftTweakerAPI.apply(new crusherTemplate(outputKind, inputKind, energy, outCount, inputSize, secondaryOutput, secondaryChance));
+		CraftTweaker.LATE_ACTIONS.add(new crusherTemplate(outputKind, inputKind, energy, outCount, inputSize, secondaryOutput, secondaryChance));
 	}
 	
 	@ZenMethod
 	public static void removeCrusherByBothKind(String outputKind, String inputKind) {
-		CraftTweakerAPI.apply(new removeCrusherByBothKind(outputKind, inputKind));
+		CraftTweaker.LATE_ACTIONS.add(new removeCrusherByBothKind(outputKind, inputKind));
 	}
 	
 	public static class pressRecipe implements IAction{

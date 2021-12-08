@@ -1,4 +1,4 @@
-package Hogan.uniTweak;
+package h2steffes.uniTweak;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;

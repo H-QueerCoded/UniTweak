@@ -1,6 +1,6 @@
-package Hogan.uniTweak;
+package h2steffes.uniTweak;
 
-import Hogan.uniTweak.integration.crafttweaker.CraftTweaker;;
+import h2steffes.uniTweak.integration.crafttweaker.CraftTweaker;;
 
 public class commonProxy {
 	
