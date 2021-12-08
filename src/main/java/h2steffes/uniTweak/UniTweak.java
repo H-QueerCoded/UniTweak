@@ -16,7 +16,7 @@ public class UniTweak
     @Mod.Instance
     public static UniTweak instance;
     
-    @SidedProxy(clientSide = "Hogan.uniTweak.clientProxy", serverSide = "Hogan.uniTweak.commonProxy")
+    @SidedProxy(clientSide = "h2steffes.uniTweak.clientProxy", serverSide = "h2steffes.uniTweak.commonProxy")
     public static commonProxy proxy;
 
     @EventHandler
