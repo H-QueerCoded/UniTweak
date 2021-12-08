@@ -44,12 +44,12 @@ repositories {
 dependencies {
 	deobfCompile	"CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.554"
     deobfCompile	"blusunrize:ImmersiveEngineering:0.12-92-559"
-    deobfCompile 	"curse.maven:embers-rekindled:3010691"
+    deobfCompile 	"curse.maven:embers-rekindled-300777:3225431"
     //deobfCompile 	"slimeknights.mantle:Mantle:1.12-<mantle_build>"
     //deobfCompile 	"slimeknights:TConstruct:1.12.2-<tic_build>"
-    deobfProvided  	"curse.maven:unidict:3087800" //dev jar
-    runtime			"curse.maven:unidict:3087799" //normal jar
-    runtime			"curse.maven:wanionlib:3064112"
+    deobfProvided  	"curse.maven:unidict-244258:3553629" //dev jar
+    runtime			"curse.maven:unidict-244258:3553627" //normal jar
+    runtime			"curse.maven:wanionlib-253043:3553625"
     runtime			"mezz.jei:jei_${mc_version}:4.16.1.302"
 
 }
