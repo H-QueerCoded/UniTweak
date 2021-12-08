@@ -20,6 +20,7 @@ import stanhebben.zenscript.annotations.NotNull;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+import wanion.unidict.UniDict;
 import wanion.unidict.api.UniDictAPI;
 import wanion.unidict.resource.Resource;
 import teamroots.embers.compat.crafttweaker.CTUtil;
