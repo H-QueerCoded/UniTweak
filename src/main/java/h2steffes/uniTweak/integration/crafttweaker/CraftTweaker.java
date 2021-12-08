@@ -8,6 +8,5 @@ public class CraftTweaker {
 	public static void postInit() {
 		final UniDictAPI uniDictAPI = UniDict.getAPI();
 		ImmersiveEngineering.postInit(uniDictAPI);
-		Embers.postInit(uniDictAPI);
 	}
 }

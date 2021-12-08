@@ -31,8 +31,6 @@ import teamroots.embers.recipe.RecipeRegistry;
 @ZenRegister
 public class Embers {
 	
-	static UniDictAPI uniDictAPI;
-	
 	@ZenMethod
 	public static void stamperAdd(String output,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
 		CraftTweaker.LATE_ACTIONS.add(new stamperAdd(output,stamp,liquidAmount,outputSize,input));
@@ -59,6 +57,7 @@ public class Embers {
 		
 		@Override
 		public void apply() {
+			final UniDictAPI uniDictAPI = UniDict.getAPI();
 			int kind = Resource.getKindFromName(output);
 			List<Resource> list = uniDictAPI.getResources(kind);
 			
@@ -91,6 +90,7 @@ public class Embers {
 		
 		@Override
 		public void apply() {
+			final UniDictAPI uniDictAPI = UniDict.getAPI();
 			int kind = Resource.getKindFromName(output);
 			List<Resource> list = uniDictAPI.getResources(kind);
 			
@@ -114,8 +114,4 @@ public class Embers {
     {
         return RecipeRegistry.stampingRecipes.stream().filter(recipe -> ItemStack.areItemStacksEqual(stack,recipe.result)).collect(Collectors.toCollection(ArrayList::new));
     }
-	
-	public static void postInit(@Nonnull final UniDictAPI API) {
-		uniDictAPI = API;
-	}
 }
