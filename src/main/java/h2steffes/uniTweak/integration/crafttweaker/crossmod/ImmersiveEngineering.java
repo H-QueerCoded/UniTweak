@@ -96,7 +96,7 @@ public class ImmersiveEngineering {
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int kind = Resource.getKindFromName(removal.kind);
+			int kind = Resource.getKindFromName(kind);
 			List<Resource> list = uniDictAPI.getResources(kind);
 			
 			for(Resource resource : list) {
@@ -166,8 +166,8 @@ public class ImmersiveEngineering {
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int inputKind = Resource.getKindFromName(removal.input);
-			int outputKind = Resource.getKindFromName(removal.output);
+			int inputKind = Resource.getKindFromName(input);
+			int outputKind = Resource.getKindFromName(output);
 			List<Resource> inAndOut = uniDictAPI.getResources(inputKind, outputKind);
 			
 			for(Resource resource : inAndOut) {
