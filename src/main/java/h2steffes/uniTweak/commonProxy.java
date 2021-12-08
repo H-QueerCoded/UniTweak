@@ -13,6 +13,5 @@ public class commonProxy {
 	};
 	
 	public void postInit() {
-		CraftTweaker.postInit();
 	};
 }
