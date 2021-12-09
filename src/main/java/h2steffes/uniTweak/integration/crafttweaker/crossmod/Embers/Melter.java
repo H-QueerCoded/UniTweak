@@ -9,6 +9,7 @@ import crafttweaker.IAction;
 import crafttweaker.annotations.ModOnly;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
+import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.mc1120.CraftTweaker;
@@ -39,7 +40,7 @@ public class Melter {
 	}
 	
 	@ZenMethod
-	public static void addSecondOutput(ILiquidStack bonus, ItemStack input) {
+	public static void addSecondOutput(ILiquidStack bonus, IItemStack input) {
 		CraftTweaker.LATE_ACTIONS.add(new AddSecondary(bonus, input));
 	}
 	
@@ -82,9 +83,9 @@ public class Melter {
 		ILiquidStack bonus;
 		ItemStack input;
 		
-		public AddSecondary(ILiquidStack outputFluid, ItemStack input) {
+		public AddSecondary(ILiquidStack outputFluid, IItemStack input) {
 			this.bonus = outputFluid;
-			this.input = input;
+			this.input = CraftTweakerMC.getItemStack(input);
 		}
 
 		@Override
