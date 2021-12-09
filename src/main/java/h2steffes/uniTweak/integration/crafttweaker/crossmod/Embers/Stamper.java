@@ -1,4 +1,4 @@
-package h2steffes.uniTweak.integration.crafttweaker.crossmod;
+package h2steffes.uniTweak.integration.crafttweaker.crossmod.Embers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import crafttweaker.IAction;
 import crafttweaker.annotations.ModOnly;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
+import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.mc1120.CraftTweaker;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -25,12 +26,13 @@ import wanion.unidict.api.UniDictAPI;
 import wanion.unidict.resource.Resource;
 import teamroots.embers.compat.crafttweaker.CTUtil;
 import teamroots.embers.recipe.ItemStampingRecipe;
+import teamroots.embers.recipe.ItemMeltingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 
 @ModOnly("embers")
-@ZenClass("mods.unitweak.embers")
+@ZenClass("mods.unitweak.embers.stamper")
 @ZenRegister
-public class Embers {
+public class Stamper {
 	
 	@ZenMethod
 	public static void stamperAdd(String output,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
