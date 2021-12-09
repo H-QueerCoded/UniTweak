@@ -40,11 +40,6 @@ public class Melter {
 	}
 	
 	@ZenMethod
-	public static void addSecondOutput(ILiquidStack bonus, IItemStack input) {
-		CraftTweaker.LATE_ACTIONS.add(new AddSecondary(bonus, input));
-	}
-	
-	@ZenMethod
 	public static void remove(String input) {
 		CraftTweaker.LATE_ACTIONS.add(new Remove(input));
 	}
@@ -83,28 +78,6 @@ public class Melter {
 		
 	}
 	
-	public static class AddSecondary implements IAction{
-		ILiquidStack bonus;
-		ItemStack input;
-		
-		public AddSecondary(ILiquidStack outputFluid, IItemStack input) {
-			this.bonus = outputFluid;
-			this.input = CraftTweakerMC.getItemStack(input);
-		}
-
-		@Override
-		public void apply() {
-			for(ItemMeltingRecipe recipe: getRecipesByInput(input)) {
-				recipe.addBonusOutput(CraftTweakerMC.getLiquidStack(bonus));
-			}
-		}
-
-		@Override
-		public String describe() {
-			return "UniTweak: Adding bonus liquid "+bonus.getName()+" to Embers Geological Separator for input "+input.getDisplayName();
-		}
-	}
-	
 	public static class Remove implements IAction{
 		String inputKind;
 		
@@ -133,7 +106,7 @@ public class Melter {
 		}
 	}
 	
-	private static List<ItemMeltingRecipe> getRecipesByInput(ItemStack stack)
+	public static List<ItemMeltingRecipe> getRecipesByInput(ItemStack stack)
     {
         return RecipeRegistry.meltingRecipes.stream().filter(recipe -> recipe.input.apply(stack)).collect(Collectors.toCollection(ArrayList::new));
     }
