@@ -3,15 +3,11 @@ package h2steffes.uniTweak.integration.crafttweaker.crossmod.Embers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.annotations.ModOnly;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
-import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.mc1120.CraftTweaker;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -26,7 +22,6 @@ import wanion.unidict.api.UniDictAPI;
 import wanion.unidict.resource.Resource;
 import teamroots.embers.compat.crafttweaker.CTUtil;
 import teamroots.embers.recipe.ItemStampingRecipe;
-import teamroots.embers.recipe.ItemMeltingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 
 @ModOnly("embers")
@@ -35,22 +30,22 @@ import teamroots.embers.recipe.RecipeRegistry;
 public class Stamper {
 	
 	@ZenMethod
-	public static void stamperAdd(String output,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
-		CraftTweaker.LATE_ACTIONS.add(new stamperAdd(output,stamp,liquidAmount,outputSize,input));
+	public static void add(String output,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
+		CraftTweaker.LATE_ACTIONS.add(new Add(output,stamp,liquidAmount,outputSize,input));
 	}
 	
 	@ZenMethod
-	public static void stamperRemove(String output) {
-		CraftTweaker.LATE_ACTIONS.add(new stamperRemove(output));
+	public static void remove(String output) {
+		CraftTweaker.LATE_ACTIONS.add(new Remove(output));
 	}
 	
-	public static class stamperAdd implements IAction{
+	public static class Add implements IAction{
 		
 		String output;
 		IIngredient stamp,input;
 		int liquidAmount,outputSize;
 		
-		public stamperAdd(String output, IIngredient stamp, int liquidAmount, int outputSize, IIngredient input) {
+		public Add(String output, IIngredient stamp, int liquidAmount, int outputSize, IIngredient input) {
 			this.output=output;
 			this.stamp=stamp;
 			this.liquidAmount=liquidAmount;
@@ -83,11 +78,11 @@ public class Stamper {
 		
 	}
 	
-	public static class stamperRemove implements IAction{
+	public static class Remove implements IAction{
 		
 		String output;
 		
-		public stamperRemove(String output) {
+		public Remove(String output) {
 			this.output=output;
 		}
 		

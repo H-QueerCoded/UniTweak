@@ -11,17 +11,14 @@ import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import blusunrize.immersiveengineering.api.crafting.MetalPressRecipe;
 import blusunrize.immersiveengineering.common.util.compat.crafttweaker.CraftTweakerHelper;
+
+import java.util.List;
+
 import blusunrize.immersiveengineering.api.crafting.CrusherRecipe;
 import wanion.unidict.UniDict;
 import wanion.unidict.api.*;
 import wanion.unidict.resource.Resource;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
 
 @ModOnly("immersiveengineering")
 @ZenClass("mods.unitweak.IE.crusher")
@@ -29,24 +26,24 @@ import javax.annotation.Nonnull;
 public class Crusher {
 	
 	@ZenMethod
-	public static void crusherTemplate(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
-		CraftTweaker.LATE_ACTIONS.add(new crusherTemplate(outputKind, inputKind, energy, outCount, inputSize, secondaryOutput, secondaryChance));
+	public static void add(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
+		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, energy, outCount, inputSize, secondaryOutput, secondaryChance));
 	}
 	
 	@ZenMethod
-	public static void removeCrusherByBothKind(String outputKind, String inputKind) {
-		CraftTweaker.LATE_ACTIONS.add(new removeCrusherByBothKind(outputKind, inputKind));
+	public static void remove(String outputKind, String inputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new Remove(outputKind, inputKind));
 	}
 	
 	
-	public static class crusherTemplate implements IAction{
+	public static class Add implements IAction{
 		
 		String inputKind, outputKind;
 		int energy, in, out;
 		IItemStack secondaryOutput;
 		double secondaryChance;
 		
-		public crusherTemplate(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
+		public Add(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
 			this.outputKind = outputKind;
 			this.inputKind = inputKind;
 			this.energy = energy;
@@ -80,10 +77,10 @@ public class Crusher {
 		}
 	}
 	
-	public static class removeCrusherByBothKind implements IAction {
+	public static class Remove implements IAction {
 		String input, output;
 		
-		public removeCrusherByBothKind(String outputKind, String inputKind) {
+		public Remove(String outputKind, String inputKind) {
 			input = inputKind;
 			output = outputKind;
 		}

@@ -11,17 +11,13 @@ import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import java.util.List;
+
 import blusunrize.immersiveengineering.api.crafting.MetalPressRecipe;
-import blusunrize.immersiveengineering.common.util.compat.crafttweaker.CraftTweakerHelper;
-import blusunrize.immersiveengineering.api.crafting.CrusherRecipe;
 import wanion.unidict.UniDict;
 import wanion.unidict.api.*;
 import wanion.unidict.resource.Resource;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
 
 @ModOnly("immersiveengineering")
 @ZenClass("mods.unitweak.IE.press")
@@ -29,22 +25,22 @@ import javax.annotation.Nonnull;
 public class Press {
 	
 	@ZenMethod
-	public static void pressRecipe(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize) {
-		CraftTweaker.LATE_ACTIONS.add(new pressRecipe(outputKind, inputKind, mold, energy, outCount, inputSize));
+	public static void add(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize) {
+		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, mold, energy, outCount, inputSize));
 	}
 	
 	@ZenMethod
-	public static void removePressByOutputKind(String outputKind) {
-		CraftTweaker.LATE_ACTIONS.add(new removePressByOutputKind(outputKind));
+	public static void remove(String outputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new Remove(outputKind));
 	}
 	
-	public static class pressRecipe implements IAction{
+	public static class Add implements IAction{
 		
 		int inNum, outNum, energy;
 		String inputKind, outputKind;
 		ItemStack mold;
 
-		public pressRecipe(String outputKind, String inputKind, IItemStack mold, int energy, int outCount, int inputSize) {
+		public Add(String outputKind, String inputKind, IItemStack mold, int energy, int outCount, int inputSize) {
 			this.inputKind=inputKind;
 			this.outputKind=outputKind;
 			this.mold=CraftTweakerMC.getItemStack(mold);
@@ -75,11 +71,11 @@ public class Press {
 		
 	}
 	
-	public static class removePressByOutputKind implements IAction{
+	public static class Remove implements IAction{
 		
 		String kind;
 		
-		public removePressByOutputKind(String outputKind) {
+		public Remove(String outputKind) {
 			kind=outputKind;
 		}
 
