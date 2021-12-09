@@ -44,6 +44,11 @@ public class Melter {
 		CraftTweaker.LATE_ACTIONS.add(new AddSecondary(bonus, input));
 	}
 	
+	@ZenMethod
+	public static void remove(String input) {
+		CraftTweaker.LATE_ACTIONS.add(new Remove(input));
+	}
+	
 	public static class Add implements IAction{
 		String input;
 		int liquidAmount;
@@ -73,8 +78,7 @@ public class Melter {
 
 		@Override
 		public String describe() {
-			// TODO Auto-generated method stub
-			return null;
+			return "UniTweak: Creating Embers Melter recipes for "+input+" to "+liquidAmount+"mb";
 		}
 		
 	}
@@ -97,8 +101,35 @@ public class Melter {
 
 		@Override
 		public String describe() {
-			// TODO Auto-generated method stub
-			return null;
+			return "UniTweak: Adding bonus liquid "+bonus.getName()+" to Embers Geological Separator for input "+input.getDisplayName();
+		}
+	}
+	
+	public static class Remove implements IAction{
+		String inputKind;
+		
+		public Remove(String input) {
+			inputKind = input;
+		}
+
+		@Override
+		public void apply() {
+			final UniDictAPI uniDictAPI = UniDict.getAPI();
+			int kind = Resource.getKindFromName(inputKind);
+			List<Resource> list = uniDictAPI.getResources(kind);
+			
+			for(Resource resource : list) {
+				List<ItemStack> inputList = resource.getChild(kind).getEntries();
+				for (ItemStack input : inputList) {
+					CraftTweakerAPI.logInfo("UniTweak: Removing Embers Melter recipes with input "+input.getDisplayName());
+					RecipeRegistry.meltingRecipes.removeAll(getRecipesByInput(input));
+				}
+			}
+		}
+
+		@Override
+		public String describe() {
+			return "UniTweak: Removing Embers Melter recipes for input kind "+inputKind;
 		}
 	}
 	
