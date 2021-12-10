@@ -27,66 +27,65 @@ import teamroots.embers.recipe.RecipeRegistry;
 public class HearthCoil {
 	
 	@ZenMethod
-	public static void add(String output, int outCount, String input) {
-		CraftTweaker.LATE_ACTIONS.add(new Add(output, outCount, input));
+	public static void add(String outputKind, int outCount, String inputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, outCount, inputKind));
 	}
 	
 	@ZenMethod
-	public static void remove(String input) {
-		CraftTweaker.LATE_ACTIONS.add(new Remove(input));
+	public static void remove(String inputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new Remove(inputKind));
 	}
 	
 	public static class Add implements IAction{
 		
-		String inputKind, outputKind;
-		int outCount;
+		String inputKindString, outputKindString;
+		int outputCount;
 
-		Add(String o, int oC, String i){
-			inputKind = i;
-			outputKind = o;
-			outCount = oC;
+		Add(String outputKind, int outCount, String inputKind){
+			inputKindString = inputKind;
+			outputKindString = outputKind;
+			outputCount = outCount;
 		}
 		
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int input = Resource.getKindFromName(inputKind);
-			int output = Resource.getKindFromName(outputKind);
-			List<Resource> inAndOut = uniDictAPI.getResources(input, output);
+			int inputKindInt = Resource.getKindFromName(inputKindString);
+			int outputKindInt = Resource.getKindFromName(outputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt, outputKindInt);
 			
-			for(Resource resource : inAndOut) {
-				ItemStack outStack = resource.getChild(output).getMainEntry(outCount);
-				IOreDictEntry in = ResourceHandling.getOreDictEntry(resource, input);
-				CraftTweakerAPI.logInfo("UniTweak: Adding Embers Hearth Coil recipe for "+in.getName()+" to "+outStack.getCount()+" "+outStack.getDisplayName());
-				RecipeRegistry.heatCoilRecipes.add(new HeatCoilRecipe(outStack, CraftTweakerMC.getIngredient(in)));
+			for(Resource resource : matchingResources) {
+				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
+				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
+				CraftTweakerAPI.logInfo("UniTweak: Adding Embers Hearth Coil recipe for "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());
+				RecipeRegistry.heatCoilRecipes.add(new HeatCoilRecipe(outputStack, CraftTweakerMC.getIngredient(inputOreDictEntry)));
 			}
 			
 		}
 
 		@Override
 		public String describe() {
-			// TODO Auto-generated method stub
-			return null;
+			return "UniTweak: Adding recipes for Embers Hearth Coil in pattern "+inputKindString+" to "+outputCount+" "+outputKindString;
 		}
 		
 	}
 	
 	public static class Remove implements IAction{
 		
-		String input;
+		String inputKindString;
 		
 		public Remove(String input) {
-			this.input = input;
+			this.inputKindString = input;
 		}
 
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int kind = Resource.getKindFromName(input);
-			List<Resource> list = uniDictAPI.getResources(input);
+			int inputKindNum = Resource.getKindFromName(inputKindString);
+			List<Resource> mathcingResources = uniDictAPI.getResources(inputKindNum);
 			
-			for(Resource resource : list) {
-				List<ItemStack> inputList = resource.getChild(kind).getEntries();
+			for(Resource resource : mathcingResources) {
+				List<ItemStack> inputList = resource.getChild(inputKindNum).getEntries();
 				for (ItemStack input : inputList) {
 					CraftTweakerAPI.logInfo("UniTweak: Removing Embers Hearth Coil recipes with input "+input.getDisplayName());
 					RecipeRegistry.heatCoilRecipes.removeAll(getRecipesByInput(input));
@@ -96,8 +95,7 @@ public class HearthCoil {
 
 		@Override
 		public String describe() {
-			// TODO Auto-generated method stub
-			return null;
+			return "UniTweak: Removing recipes for Embers Hearth Coil with input kind "+inputKindString;
 		}
 		
 		private static List<HeatCoilRecipe> getRecipesByInput(ItemStack stack) {

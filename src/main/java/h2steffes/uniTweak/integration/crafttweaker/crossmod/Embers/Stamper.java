@@ -30,23 +30,23 @@ import teamroots.embers.recipe.RecipeRegistry;
 public class Stamper {
 	
 	@ZenMethod
-	public static void add(String output,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
-		CraftTweaker.LATE_ACTIONS.add(new Add(output,stamp,liquidAmount,outputSize,input));
+	public static void add(String outputKind,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
+		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind,stamp,liquidAmount,outputSize,input));
 	}
 	
 	@ZenMethod
-	public static void remove(String output) {
-		CraftTweaker.LATE_ACTIONS.add(new Remove(output));
+	public static void remove(String outputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new Remove(outputKind));
 	}
 	
 	public static class Add implements IAction{
 		
-		String output;
+		String outputKindString;
 		IIngredient stamp,input;
 		int liquidAmount,outputSize;
 		
 		public Add(String output, IIngredient stamp, int liquidAmount, int outputSize, IIngredient input) {
-			this.output=output;
+			this.outputKindString=output;
 			this.stamp=stamp;
 			this.liquidAmount=liquidAmount;
 			this.outputSize=outputSize;
@@ -56,44 +56,44 @@ public class Stamper {
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int kind = Resource.getKindFromName(output);
-			List<Resource> list = uniDictAPI.getResources(kind);
+			int outKindInt = Resource.getKindFromName(outputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(outKindInt);
 			
-			for (Resource resource: list) {
-				ItemStack outStack = resource.getChild(kind).getMainEntry(outputSize);
+			for (Resource resource: matchingResources) {
+				ItemStack outputStack = resource.getChild(outKindInt).getMainEntry(outputSize);
 				if(!FluidRegistry.isFluidRegistered(resource.getName().toLowerCase())){
 					CraftTweakerAPI.logInfo("UniTweak: No molten version of "+resource.getName()+", skipping stamper recipe");
 					continue;
 				}
 				Fluid fluid = FluidRegistry.getFluid(resource.getName().toLowerCase());
-				CraftTweakerAPI.logInfo("UniTweak: Adding stamper recipe for "+liquidAmount+"mb of "+resource.getName()+" to "+outputSize+" "+outStack.getDisplayName());
-				RecipeRegistry.stampingRecipes.add(new ItemStampingRecipe(CTUtil.toIngredient(input),new FluidStack(fluid, liquidAmount),CTUtil.toIngredient(stamp),outStack));
+				CraftTweakerAPI.logInfo("UniTweak: Adding stamper recipe for "+liquidAmount+"mb of "+resource.getName()+" to "+outputSize+" "+outputStack.getDisplayName());
+				RecipeRegistry.stampingRecipes.add(new ItemStampingRecipe(CTUtil.toIngredient(input),new FluidStack(fluid, liquidAmount),CTUtil.toIngredient(stamp),outputStack));
 			}
 		}
 
 		@Override
 		public String describe() {
-			return "UniTweak: Trying to create Embers Stamper recipe for "+liquidAmount+"mb to "+output;
+			return "UniTweak: Trying to create Embers Stamper recipe for "+liquidAmount+"mb to "+outputKindString;
 		}
 		
 	}
 	
 	public static class Remove implements IAction{
 		
-		String output;
+		String outputKindString;
 		
 		public Remove(String output) {
-			this.output=output;
+			this.outputKindString=output;
 		}
 		
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int kind = Resource.getKindFromName(output);
-			List<Resource> list = uniDictAPI.getResources(kind);
+			int outputKindInt = Resource.getKindFromName(outputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
 			
-			for(Resource resource : list) {
-				List<ItemStack> outputList = resource.getChild(kind).getEntries();
+			for(Resource resource : matchingResources) {
+				List<ItemStack> outputList = resource.getChild(outputKindInt).getEntries();
 				for (ItemStack output : outputList) {
 					CraftTweakerAPI.logInfo("UniTweak: Removing Stamper recipes with output "+output.getDisplayName());
 					RecipeRegistry.stampingRecipes.removeAll(getRecipesByOutput(output));
@@ -103,7 +103,7 @@ public class Stamper {
 
 		@Override
 		public String describe() {
-			return "UniTweak: Removing Embers Stamper recipes which output "+output;
+			return "UniTweak: Removing Embers Stamper recipes which output "+outputKindString;
 		}
 		
 	}

@@ -28,8 +28,8 @@ import wanion.unidict.resource.Resource;
 public class Press {
 	
 	@ZenMethod
-	public static void add(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize) {
-		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, mold, energy, outCount, inputSize));
+	public static void add(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outputCount, @Optional(valueLong = 1) int inputCount) {
+		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, mold, energy, outputCount, inputCount));
 	}
 	
 	@ZenMethod
@@ -39,57 +39,57 @@ public class Press {
 	
 	public static class Add implements IAction{
 		
-		int inNum, outNum, energy;
-		String inputKind, outputKind;
+		int inputCount, outputCount, energy;
+		String inputKindString, outputKindString;
 		ItemStack mold;
 
 		public Add(String outputKind, String inputKind, IItemStack mold, int energy, int outCount, int inputSize) {
-			this.inputKind=inputKind;
-			this.outputKind=outputKind;
+			this.inputKindString=inputKind;
+			this.outputKindString=outputKind;
 			this.mold=CraftTweakerMC.getItemStack(mold);
-			inNum=inputSize;
-			outNum=outCount;
+			inputCount=inputSize;
+			outputCount=outCount;
 			this.energy=energy;
 		}
 		
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int input = Resource.getKindFromName(inputKind);
-			int output = Resource.getKindFromName(outputKind);
-			List<Resource> inAndOut = uniDictAPI.getResources(input, output);
+			int inputKindInt = Resource.getKindFromName(inputKindString);
+			int outputKindInt = Resource.getKindFromName(outputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt, outputKindInt);
 			
-			for(Resource resource : inAndOut) {
-				ItemStack outStack = resource.getChild(output).getMainEntry(outNum);
-				IOreDictEntry inputOreDict = ResourceHandling.getOreDictEntry(resource, input);
-				CraftTweakerAPI.logInfo("UniTweak: Adding metal press recipe for "+inNum+" "+inputOreDict.getName()+" to "+outStack.getCount()+" "+outStack.getDisplayName());
-				MetalPressRecipe.addRecipe(outStack, CraftTweakerHelper.toObject(inputOreDict.amount(inNum)), mold, energy);
+			for(Resource resource : matchingResources) {
+				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
+				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
+				CraftTweakerAPI.logInfo("UniTweak: Adding metal press recipe for "+inputCount+" "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());
+				MetalPressRecipe.addRecipe(outputStack, CraftTweakerHelper.toObject(inputOreDictEntry.amount(inputCount)), mold, energy);
 			}
 		}
 
 		@Override
 		public String describe() {
-			return "UniTweak: Trying to create patterned IE Metal Press recipe template for "+inputKind+" to "+outputKind;
+			return "UniTweak: Trying to create patterned IE Metal Press recipe template for "+inputKindString+" to "+outputKindString;
 		}
 		
 	}
 	
 	public static class Remove implements IAction{
 		
-		String kind;
+		String outputKindString;
 		
 		public Remove(String outputKind) {
-			kind=outputKind;
+			outputKindString=outputKind;
 		}
 
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int kindNum = Resource.getKindFromName(kind);
-			List<Resource> list = uniDictAPI.getResources(kindNum);
+			int outputKindInt = Resource.getKindFromName(outputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
 			
-			for(Resource resource : list) {
-				List<ItemStack> outputList = resource.getChild(kind).getEntries();
+			for(Resource resource : matchingResources) {
+				List<ItemStack> outputList = resource.getChild(outputKindString).getEntries();
 				for (ItemStack output : outputList) {
 					CraftTweakerAPI.logInfo("UniTweak: Removing Metal Press recipes with output "+output.getDisplayName());
 					MetalPressRecipe.removeRecipes(output);
@@ -99,7 +99,7 @@ public class Press {
 
 		@Override
 		public String describe() {
-			return "UniTweak: Removing all Metal Press recipes with output of kind: "+kind;
+			return "UniTweak: Removing all Metal Press recipes with output of kind: "+outputKindString;
 		}
 	}
 }

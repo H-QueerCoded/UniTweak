@@ -37,64 +37,64 @@ import teamroots.embers.recipe.RecipeRegistry;
 public class Melter {
 	
 	@ZenMethod
-	public static void add(int liquidAmount, String input) {
-		CraftTweaker.LATE_ACTIONS.add(new Add(liquidAmount, input));
+	public static void add(int liquidAmount, String inputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new Add(liquidAmount, inputKind));
 	}
 	
 	@ZenMethod
-	public static void remove(String input) {
-		CraftTweaker.LATE_ACTIONS.add(new Remove(input));
+	public static void remove(String inputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new Remove(inputKind));
 	}
 	
 	public static class Add implements IAction{
-		String input;
+		String inputKindString;
 		int liquidAmount;
 		
 		public Add(int liquidAmount, String input) {
-			this.input=input;
+			this.inputKindString=input;
 			this.liquidAmount=liquidAmount;
 		}
 		
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int kind = Resource.getKindFromName(input);
-			List<Resource> list = uniDictAPI.getResources(kind);
+			int inputKindInt = Resource.getKindFromName(inputKindString);
+			List<Resource> mathcingResources = uniDictAPI.getResources(inputKindInt);
 			
-			for(Resource resource : list) {
-				IOreDictEntry in = ResourceHandling.getOreDictEntry(resource, kind);
+			for(Resource resource : mathcingResources) {
+				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
 				if(!FluidRegistry.isFluidRegistered(resource.getName().toLowerCase())){
 					CraftTweakerAPI.logInfo("UniTweak: No molten version of "+resource.getName()+", skipping melter recipe");
 					continue;
 				}
 				Fluid fluid = FluidRegistry.getFluid(resource.getName().toLowerCase());
 				
-				RecipeRegistry.meltingRecipes.add(new ItemMeltingRecipe( CraftTweakerMC.getIngredient(in), new FluidStack(fluid, liquidAmount)));
+				RecipeRegistry.meltingRecipes.add(new ItemMeltingRecipe( CraftTweakerMC.getIngredient(inputOreDictEntry), new FluidStack(fluid, liquidAmount)));
 			}
 		}
 
 		@Override
 		public String describe() {
-			return "UniTweak: Creating Embers Melter recipes for "+input+" to "+liquidAmount+"mb";
+			return "UniTweak: Creating Embers Melter recipes for "+inputKindString+" to "+liquidAmount+"mb";
 		}
 		
 	}
 	
 	public static class Remove implements IAction{
-		String inputKind;
+		String inputKindString;
 		
 		public Remove(String input) {
-			inputKind = input;
+			inputKindString = input;
 		}
 
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int kind = Resource.getKindFromName(inputKind);
-			List<Resource> list = uniDictAPI.getResources(kind);
+			int inputKindInt = Resource.getKindFromName(inputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt);
 			
-			for(Resource resource : list) {
-				List<ItemStack> inputList = resource.getChild(kind).getEntries();
+			for(Resource resource : matchingResources) {
+				List<ItemStack> inputList = resource.getChild(inputKindInt).getEntries();
 				for (ItemStack input : inputList) {
 					CraftTweakerAPI.logInfo("UniTweak: Removing Embers Melter recipes with input "+input.getDisplayName());
 					RecipeRegistry.meltingRecipes.removeAll(getRecipesByInput(input));
@@ -104,7 +104,7 @@ public class Melter {
 
 		@Override
 		public String describe() {
-			return "UniTweak: Removing Embers Melter recipes for input kind "+inputKind;
+			return "UniTweak: Removing Embers Melter recipes for input kind "+inputKindString;
 		}
 	}
 	
