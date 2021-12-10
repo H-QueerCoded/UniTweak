@@ -28,92 +28,112 @@ import wanion.unidict.resource.Resource;
 public class Crusher {
 	
 	@ZenMethod
-	public static void add(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
-		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, energy, outCount, inputSize, secondaryOutput, secondaryChance));
+	public static void add(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outputCount, @Optional(valueLong = 1) int inputCount, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
+		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, energy, outputCount, inputCount, secondaryOutput, secondaryChance));
 	}
 	
 	@ZenMethod
-	public static void remove(String outputKind, String inputKind) {
-		CraftTweaker.LATE_ACTIONS.add(new Remove(outputKind, inputKind));
+	public static void removeForInput(String inputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new RemoveForInput(inputKind));
 	}
 	
+	@ZenMethod
+	public static void removeForOutput(String outputKind) {
+		CraftTweaker.LATE_ACTIONS.add(new RemoveForOutput(outputKind));
+	}
 	
 	public static class Add implements IAction{
 		
-		String inputKind, outputKind;
-		int energy, in, out;
+		String inputKindString, outputKindString;
+		int energy, inputCount, outputCount;
 		IItemStack secondaryOutput;
 		double secondaryChance;
 		
 		public Add(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
-			this.outputKind = outputKind;
-			this.inputKind = inputKind;
+			this.outputKindString = outputKind;
+			this.inputKindString = inputKind;
 			this.energy = energy;
 			this.secondaryOutput = secondaryOutput;
 			this.secondaryChance = secondaryChance;
-			in = inputSize;
-			out = outCount;
+			inputCount = inputSize;
+			outputCount = outCount;
 		}
 		
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int input = Resource.getKindFromName(inputKind);
-			int output = Resource.getKindFromName(outputKind);
-			List<Resource> inAndOut = uniDictAPI.getResources(input, output);
+			int inputKindInt = Resource.getKindFromName(inputKindString);
+			int outputKindInt = Resource.getKindFromName(outputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt, outputKindInt);
 			
-			for(Resource resource : inAndOut) {
-				ItemStack outStack = resource.getChild(output).getMainEntry(out);
-				IOreDictEntry inputOreDict = ResourceHandling.getOreDictEntry(resource, input);
-				CraftTweakerAPI.logInfo("UniTweak: Adding crusher recipe for "+in+" "+inputOreDict.getName()+" to "+outStack.getCount()+" "+outStack.getDisplayName());
-				CrusherRecipe r = new CrusherRecipe(outStack, CraftTweakerHelper.toObject(inputOreDict.amount(in)), energy);
+			for(Resource resource : matchingResources) {
+				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
+				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
+				CraftTweakerAPI.logInfo("UniTweak: Adding crusher recipe for "+inputCount+" "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());
+				CrusherRecipe recipe = new CrusherRecipe(outputStack, CraftTweakerHelper.toObject(inputOreDictEntry.amount(inputCount)), energy);
 				if(secondaryOutput!=null)
-					r.addToSecondaryOutput(CraftTweakerHelper.toStack(secondaryOutput), (float)secondaryChance);
-				CrusherRecipe.recipeList.add(r);
+					recipe.addToSecondaryOutput(CraftTweakerHelper.toStack(secondaryOutput), (float)secondaryChance);
+				CrusherRecipe.recipeList.add(recipe);
 			}
 		}
 		
 		@Override
 		public String describe() {
-			return "UniTweak: Trying to create patterned IE Crusher recipe for "+inputKind+" to "+outputKind;
+			return "UniTweak: Trying to create patterned IE Crusher recipe for "+inputKindString+" to "+outputKindString;
 		}
 	}
 	
-	public static class Remove implements IAction {
-		String input, output;
+	public static class RemoveForInput implements IAction {
+		String inputKindString;
 		
-		public Remove(String outputKind, String inputKind) {
-			input = inputKind;
-			output = outputKind;
+		public RemoveForInput(String inputKind) {
+			inputKindString = inputKind;
 		}
 		
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int inputKind = Resource.getKindFromName(input);
-			int outputKind = Resource.getKindFromName(output);
-			List<Resource> inAndOut = uniDictAPI.getResources(inputKind, outputKind);
+			int inputKindInt = Resource.getKindFromName(inputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt);
 			
-			for(Resource resource : inAndOut) {
-				List<ItemStack> inputList = resource.getChild(inputKind).getEntries();
+			for(Resource resource : matchingResources) {
+				List<ItemStack> inputList = resource.getChild(inputKindInt).getEntries();
 				for (ItemStack input : inputList) {
-					CrusherRecipe r = CrusherRecipe.findRecipe(input);
-					if(r != null) {
-						List<ItemStack> outputList = resource.getChild(outputKind).getEntries();
-						for (ItemStack output : outputList) {
-							if(ItemStack.areItemsEqual(r.output, output)) {
-								CraftTweakerAPI.logInfo("UniTweak: Removing Crusher recipe for "+input.getDisplayName()+" to "+output.getDisplayName());
-								CrusherRecipe.removeRecipesForInput(input);
-							}
-						}
-					}
+					CrusherRecipe.removeRecipesForInput(input);
 				}
 			}
 		}
 
 		@Override
 		public String describe() {
-			return "UniTweak: Removing all Crusher recipes with input of "+input+" and output of "+output;
+			return "UniTweak: Removing all Crusher recipes with input of "+inputKindString;
+		}
+	}
+	
+	public static class RemoveForOutput implements IAction {
+		String outputKindString;
+		
+		public RemoveForOutput(String outputKind) {
+			outputKindString = outputKind;
+		}
+		
+		@Override
+		public void apply() {
+			final UniDictAPI uniDictAPI = UniDict.getAPI();
+			int outputKindInt = Resource.getKindFromName(outputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
+			
+			for(Resource resource : matchingResources) {
+				List<ItemStack> outputList = resource.getChild(outputKindInt).getEntries();
+				for (ItemStack output : outputList) {
+					CrusherRecipe.removeRecipesForOutput(output);
+				}
+			}
+		}
+
+		@Override
+		public String describe() {
+			return "UniTweak: Removing all Crusher recipes with output of "+outputKindString;
 		}
 	}
 }
