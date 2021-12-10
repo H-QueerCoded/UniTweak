@@ -31,11 +31,6 @@ public class HearthCoil {
 		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, outCount, inputKind));
 	}
 	
-	@ZenMethod
-	public static void remove(String inputKind) {
-		CraftTweaker.LATE_ACTIONS.add(new Remove(inputKind));
-	}
-	
 	public static class Add implements IAction{
 		
 		String inputKindString, outputKindString;
@@ -67,40 +62,6 @@ public class HearthCoil {
 		public String describe() {
 			return "UniTweak: Adding recipes for Embers Hearth Coil in pattern "+inputKindString+" to "+outputCount+" "+outputKindString;
 		}
-		
-	}
-	
-	public static class Remove implements IAction{
-		
-		String inputKindString;
-		
-		public Remove(String input) {
-			this.inputKindString = input;
-		}
-
-		@Override
-		public void apply() {
-			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int inputKindNum = Resource.getKindFromName(inputKindString);
-			List<Resource> mathcingResources = uniDictAPI.getResources(inputKindNum);
-			
-			for(Resource resource : mathcingResources) {
-				List<ItemStack> inputList = resource.getChild(inputKindNum).getEntries();
-				for (ItemStack input : inputList) {
-					CraftTweakerAPI.logInfo("UniTweak: Removing Embers Hearth Coil recipes with input "+input.getDisplayName());
-					RecipeRegistry.heatCoilRecipes.removeAll(getRecipesByInput(input));
-				}
-			}
-		}
-
-		@Override
-		public String describe() {
-			return "UniTweak: Removing recipes for Embers Hearth Coil with input kind "+inputKindString;
-		}
-		
-		private static List<HeatCoilRecipe> getRecipesByInput(ItemStack stack) {
-	        return RecipeRegistry.heatCoilRecipes.stream().filter(recipe -> recipe.matches(stack)).collect(Collectors.toCollection(ArrayList::new));
-	    }
 		
 	}
 }
