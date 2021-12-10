@@ -6,7 +6,9 @@ import crafttweaker.annotations.ModOnly;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.api.oredict.IOreDictEntry;
 import crafttweaker.mc1120.CraftTweaker;
+import h2steffes.uniTweak.util.ResourceHandling;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -62,9 +64,9 @@ public class Crusher {
 			
 			for(Resource resource : inAndOut) {
 				ItemStack outStack = resource.getChild(output).getMainEntry(out);
-				ItemStack inStack = resource.getChild(input).getMainEntry(in);
-				CraftTweakerAPI.logInfo("UniTweak: Adding crusher recipe for "+inStack.getCount()+" "+inStack.getDisplayName()+" to "+outStack.getCount()+" "+outStack.getDisplayName());
-				CrusherRecipe r = new CrusherRecipe(outStack, inStack, energy);
+				IOreDictEntry inputOreDict = ResourceHandling.getOreDictEntry(resource, input);
+				CraftTweakerAPI.logInfo("UniTweak: Adding crusher recipe for "+in+" "+inputOreDict.getName()+" to "+outStack.getCount()+" "+outStack.getDisplayName());
+				CrusherRecipe r = new CrusherRecipe(outStack, CraftTweakerHelper.toObject(inputOreDict.amount(in)), energy);
 				if(secondaryOutput!=null)
 					r.addToSecondaryOutput(CraftTweakerHelper.toStack(secondaryOutput), (float)secondaryChance);
 				CrusherRecipe.recipeList.add(r);

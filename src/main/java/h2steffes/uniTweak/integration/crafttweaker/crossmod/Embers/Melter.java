@@ -12,7 +12,9 @@ import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.api.oredict.IOreDictEntry;
 import crafttweaker.mc1120.CraftTweaker;
+import h2steffes.uniTweak.util.ResourceHandling;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -60,14 +62,14 @@ public class Melter {
 			List<Resource> list = uniDictAPI.getResources(kind);
 			
 			for(Resource resource : list) {
-				ItemStack inStack = resource.getChild(kind).getMainEntry();
+				IOreDictEntry in = ResourceHandling.getOreDictEntry(resource, kind);
 				if(!FluidRegistry.isFluidRegistered(resource.getName().toLowerCase())){
 					CraftTweakerAPI.logInfo("UniTweak: No molten version of "+resource.getName()+", skipping melter recipe");
 					continue;
 				}
 				Fluid fluid = FluidRegistry.getFluid(resource.getName().toLowerCase());
 				
-				RecipeRegistry.meltingRecipes.add(new ItemMeltingRecipe(CraftingHelper.getIngredient(inStack), new FluidStack(fluid, liquidAmount)));
+				RecipeRegistry.meltingRecipes.add(new ItemMeltingRecipe( CraftTweakerMC.getIngredient(in), new FluidStack(fluid, liquidAmount)));
 			}
 		}
 

@@ -6,7 +6,9 @@ import crafttweaker.annotations.ModOnly;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.api.oredict.IOreDictEntry;
 import crafttweaker.mc1120.CraftTweaker;
+import h2steffes.uniTweak.util.ResourceHandling;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -15,6 +17,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import java.util.List;
 
 import blusunrize.immersiveengineering.api.crafting.MetalPressRecipe;
+import blusunrize.immersiveengineering.common.util.compat.crafttweaker.CraftTweakerHelper;
 import wanion.unidict.UniDict;
 import wanion.unidict.api.*;
 import wanion.unidict.resource.Resource;
@@ -58,9 +61,9 @@ public class Press {
 			
 			for(Resource resource : inAndOut) {
 				ItemStack outStack = resource.getChild(output).getMainEntry(outNum);
-				ItemStack inStack = resource.getChild(input).getMainEntry(inNum);
-				CraftTweakerAPI.logInfo("UniTweak: Adding metal press recipe for "+inStack.getCount()+" "+inStack.getDisplayName()+" to "+outStack.getCount()+" "+outStack.getDisplayName());
-				MetalPressRecipe.addRecipe(outStack, inStack, mold, energy);
+				IOreDictEntry inputOreDict = ResourceHandling.getOreDictEntry(resource, input);
+				CraftTweakerAPI.logInfo("UniTweak: Adding metal press recipe for "+inNum+" "+inputOreDict.getName()+" to "+outStack.getCount()+" "+outStack.getDisplayName());
+				MetalPressRecipe.addRecipe(outStack, CraftTweakerHelper.toObject(inputOreDict.amount(inNum)), mold, energy);
 			}
 		}
 
