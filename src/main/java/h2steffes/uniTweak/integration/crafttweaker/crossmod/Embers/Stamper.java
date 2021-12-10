@@ -56,11 +56,11 @@ public class Stamper {
 		@Override
 		public void apply() {
 			final UniDictAPI uniDictAPI = UniDict.getAPI();
-			int outKindInt = Resource.getKindFromName(outputKindString);
-			List<Resource> matchingResources = uniDictAPI.getResources(outKindInt);
+			int outputKindInt = Resource.getKindFromName(outputKindString);
+			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
 			
 			for (Resource resource: matchingResources) {
-				ItemStack outputStack = resource.getChild(outKindInt).getMainEntry(outputSize);
+				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputSize);
 				if(!FluidRegistry.isFluidRegistered(resource.getName().toLowerCase())){
 					CraftTweakerAPI.logInfo("UniTweak: No molten version of "+resource.getName()+", skipping stamper recipe");
 					continue;
