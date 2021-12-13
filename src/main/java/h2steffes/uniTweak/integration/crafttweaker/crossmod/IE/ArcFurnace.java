@@ -79,7 +79,7 @@ public class ArcFurnace {
 
 		@Override
 		public String describe() {
-			return "UniTweak: ";
+			return "UniTweak: Adding Arc Furnace reccipes for "+inputCount+" "+inputKindString+" to "+outputCount+" "+outputKindString;
 		}
 	}
 
