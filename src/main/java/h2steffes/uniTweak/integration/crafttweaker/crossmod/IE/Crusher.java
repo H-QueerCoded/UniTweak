@@ -15,6 +15,8 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import blusunrize.immersiveengineering.common.util.compat.crafttweaker.CraftTweakerHelper;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import blusunrize.immersiveengineering.api.crafting.CrusherRecipe;
@@ -26,6 +28,14 @@ import wanion.unidict.resource.Resource;
 @ZenClass("mods.unitweak.IE.crusher")
 @ZenRegister
 public class Crusher {
+	
+	static List<String> resourcesToIgnore =  new ArrayList<String>();
+	
+	@ZenMethod
+	public static void ignore(String[] resources) {
+		resourcesToIgnore.clear();
+		Collections.addAll(resourcesToIgnore, resources);
+	}
 	
 	@ZenMethod
 	public static void add(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outputCount, @Optional(valueLong = 1) int inputCount, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
@@ -67,6 +77,10 @@ public class Crusher {
 			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt, outputKindInt);
 			
 			for(Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
 				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
 				CraftTweakerAPI.logInfo("UniTweak: Adding crusher recipe for "+inputCount+" "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());
@@ -97,6 +111,10 @@ public class Crusher {
 			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt);
 			
 			for(Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				List<ItemStack> inputList = resource.getChild(inputKindInt).getEntries();
 				for (ItemStack input : inputList) {
 					CrusherRecipe.removeRecipesForInput(input);

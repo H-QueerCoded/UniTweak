@@ -1,6 +1,7 @@
 package h2steffes.uniTweak.integration.crafttweaker.crossmod.Embers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import crafttweaker.CraftTweakerAPI;
@@ -28,6 +29,14 @@ import teamroots.embers.recipe.RecipeRegistry;
 @ZenClass("mods.unitweak.embers.stamper")
 @ZenRegister
 public class Stamper {
+	
+	static List<String> resourcesToIgnore =  new ArrayList<String>();
+	
+	@ZenMethod
+	public static void ignore(String[] resources) {
+		resourcesToIgnore.clear();
+		Collections.addAll(resourcesToIgnore, resources);
+	}
 	
 	@ZenMethod
 	public static void add(String outputKind,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
@@ -60,6 +69,10 @@ public class Stamper {
 			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
 			
 			for (Resource resource: matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputSize);
 				if(!FluidRegistry.isFluidRegistered(resource.getName().toLowerCase())){
 					CraftTweakerAPI.logInfo("UniTweak: No molten version of "+resource.getName()+", skipping stamper recipe");
@@ -93,6 +106,10 @@ public class Stamper {
 			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
 			
 			for(Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				List<ItemStack> outputList = resource.getChild(outputKindInt).getEntries();
 				for (ItemStack output : outputList) {
 					CraftTweakerAPI.logInfo("UniTweak: Removing Stamper recipes with output "+output.getDisplayName());

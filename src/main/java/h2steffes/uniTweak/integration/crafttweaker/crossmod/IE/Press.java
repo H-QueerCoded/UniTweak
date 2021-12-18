@@ -10,10 +10,13 @@ import crafttweaker.api.oredict.IOreDictEntry;
 import crafttweaker.mc1120.CraftTweaker;
 import h2steffes.uniTweak.util.ResourceHandling;
 import net.minecraft.item.ItemStack;
+import scala.actors.threadpool.Arrays;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import blusunrize.immersiveengineering.api.crafting.MetalPressRecipe;
@@ -26,6 +29,14 @@ import wanion.unidict.resource.Resource;
 @ZenClass("mods.unitweak.IE.press")
 @ZenRegister
 public class Press {
+	
+	static List<String> resourcesToIgnore =  new ArrayList<String>();
+	
+	@ZenMethod
+	public static void ignore(String[] resources) {
+		resourcesToIgnore.clear();
+		Collections.addAll(resourcesToIgnore, resources);
+	}
 	
 	@ZenMethod
 	public static void add(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outputCount, @Optional(valueLong = 1) int inputCount) {
@@ -60,6 +71,10 @@ public class Press {
 			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt, outputKindInt);
 			
 			for(Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
 				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
 				CraftTweakerAPI.logInfo("UniTweak: Adding metal press recipe for "+inputCount+" "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());
@@ -89,6 +104,10 @@ public class Press {
 			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
 			
 			for(Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				List<ItemStack> outputList = resource.getChild(outputKindString).getEntries();
 				for (ItemStack output : outputList) {
 					CraftTweakerAPI.logInfo("UniTweak: Removing Metal Press recipes with output "+output.getDisplayName());

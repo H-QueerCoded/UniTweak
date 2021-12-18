@@ -1,9 +1,12 @@
 package h2steffes.uniTweak.integration.crafttweaker.crossmod.IE;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import blusunrize.immersiveengineering.api.crafting.ArcFurnaceRecipe;
 import blusunrize.immersiveengineering.common.util.compat.crafttweaker.CraftTweakerHelper;
+import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
 import crafttweaker.annotations.ModOnly;
 import crafttweaker.annotations.ZenRegister;
@@ -25,6 +28,14 @@ import wanion.unidict.resource.Resource;
 @ZenRegister
 public class ArcFurnace {
 
+	static List<String> resourcesToIgnore =  new ArrayList<String>();
+	
+	@ZenMethod
+	public static void ignore(String[] resources) {
+		resourcesToIgnore.clear();
+		Collections.addAll(resourcesToIgnore, resources);
+	}
+	
 	@ZenMethod
 	public static void add(String outputKind, String inputKind, IItemStack slag, int time, int energyPerTick, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IIngredient[] additives, @Optional String specialRecipeType) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, slag, time, energyPerTick, outCount, inputSize, additives, specialRecipeType));
@@ -68,6 +79,10 @@ public class ArcFurnace {
 			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt, inputKindInt);
 
 			for (Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
 				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
 				ArcFurnaceRecipe recipe = new ArcFurnaceRecipe(outputStack, CraftTweakerHelper.toObject(inputOreDictEntry.amount(inputCount)), CraftTweakerHelper.toStack(slag), time, energyPerTick, adds);
@@ -98,6 +113,10 @@ public class ArcFurnace {
 			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
 
 			for (Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				List<ItemStack> outputList = resource.getChild(outputKindInt).getEntries();
 				for (ItemStack output : outputList) {
 					ArcFurnaceRecipe.removeRecipes(output);

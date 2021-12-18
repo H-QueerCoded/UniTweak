@@ -1,6 +1,7 @@
 package h2steffes.uniTweak.integration.crafttweaker.crossmod.Embers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,14 @@ import teamroots.embers.recipe.RecipeRegistry;
 @ZenRegister
 public class HearthCoil {
 	
+	static List<String> resourcesToIgnore =  new ArrayList<String>();
+	
+	@ZenMethod
+	public static void ignore(String[] resources) {
+		resourcesToIgnore.clear();
+		Collections.addAll(resourcesToIgnore, resources);
+	}
+	
 	@ZenMethod
 	public static void add(String outputKind, int outCount, String inputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, outCount, inputKind));
@@ -50,6 +59,10 @@ public class HearthCoil {
 			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt, outputKindInt);
 			
 			for(Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
 				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
 				CraftTweakerAPI.logInfo("UniTweak: Adding Embers Hearth Coil recipe for "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());

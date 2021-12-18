@@ -1,6 +1,7 @@
 package h2steffes.uniTweak.integration.crafttweaker.crossmod.Embers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,14 @@ import teamroots.embers.recipe.RecipeRegistry;
 @ZenRegister
 public class Melter {
 	
+	static List<String> resourcesToIgnore =  new ArrayList<String>();
+	
+	@ZenMethod
+	public static void ignore(String[] resources) {
+		resourcesToIgnore.clear();
+		Collections.addAll(resourcesToIgnore, resources);
+	}
+	
 	@ZenMethod
 	public static void add(int liquidAmount, String inputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(liquidAmount, inputKind));
@@ -62,6 +71,10 @@ public class Melter {
 			List<Resource> mathcingResources = uniDictAPI.getResources(inputKindInt);
 			
 			for(Resource resource : mathcingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
 				if(!FluidRegistry.isFluidRegistered(resource.getName().toLowerCase())){
 					CraftTweakerAPI.logInfo("UniTweak: No molten version of "+resource.getName()+", skipping melter recipe");
@@ -94,6 +107,10 @@ public class Melter {
 			List<Resource> matchingResources = uniDictAPI.getResources(inputKindInt);
 			
 			for(Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				List<ItemStack> inputList = resource.getChild(inputKindInt).getEntries();
 				for (ItemStack input : inputList) {
 					CraftTweakerAPI.logInfo("UniTweak: Removing Embers Melter recipes with input "+input.getDisplayName());
