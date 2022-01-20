@@ -36,7 +36,7 @@ public class HearthCoil {
 	}
 	
 	@ZenMethod
-	public static void add(String outputKind, int outCount, String inputKind) {
+	public static void addTemplate(String outputKind, int outCount, String inputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, outCount, inputKind));
 	}
 	

@@ -38,17 +38,17 @@ public class Crusher {
 	}
 	
 	@ZenMethod
-	public static void add(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outputCount, @Optional(valueLong = 1) int inputCount, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
+	public static void addTemplate(String outputKind, String inputKind, int energy, @Optional(valueLong = 1) int outputCount, @Optional(valueLong = 1) int inputCount, @Optional IItemStack secondaryOutput, @Optional double secondaryChance) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, energy, outputCount, inputCount, secondaryOutput, secondaryChance));
 	}
 	
 	@ZenMethod
-	public static void removeForInput(String inputKind) {
+	public static void removeForInputTemplate(String inputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new RemoveForInput(inputKind));
 	}
 	
 	@ZenMethod
-	public static void removeForOutput(String outputKind) {
+	public static void removeForOutputTemplate(String outputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new RemoveForOutput(outputKind));
 	}
 	

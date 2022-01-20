@@ -46,12 +46,12 @@ public class Melter {
 	}
 	
 	@ZenMethod
-	public static void add(int liquidAmount, String inputKind) {
+	public static void addTemplate(int liquidAmount, String inputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(liquidAmount, inputKind));
 	}
 	
 	@ZenMethod
-	public static void remove(String inputKind) {
+	public static void removeTemplate(String inputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new Remove(inputKind));
 	}
 	

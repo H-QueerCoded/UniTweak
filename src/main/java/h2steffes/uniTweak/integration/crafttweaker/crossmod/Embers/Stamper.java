@@ -39,12 +39,12 @@ public class Stamper {
 	}
 	
 	@ZenMethod
-	public static void add(String outputKind,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
+	public static void addTemplate(String outputKind,@NotNull IIngredient stamp, int liquidAmount, @Optional(valueLong = 1) int outputSize, @Optional IIngredient input) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind,stamp,liquidAmount,outputSize,input));
 	}
 	
 	@ZenMethod
-	public static void remove(String outputKind) {
+	public static void removeTemplate(String outputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new Remove(outputKind));
 	}
 	

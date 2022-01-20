@@ -37,12 +37,12 @@ public class ArcFurnace {
 	}
 	
 	@ZenMethod
-	public static void add(String outputKind, String inputKind, IItemStack slag, int time, int energyPerTick, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IIngredient[] additives, @Optional String specialRecipeType) {
+	public static void addTemplate(String outputKind, String inputKind, IItemStack slag, int time, int energyPerTick, @Optional(valueLong = 1) int outCount, @Optional(valueLong = 1) int inputSize, @Optional IIngredient[] additives, @Optional String specialRecipeType) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, slag, time, energyPerTick, outCount, inputSize, additives, specialRecipeType));
 	}
 	
 	@ZenMethod
-	public static void remove(String outputKind) {
+	public static void removeTemplate(String outputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new Remove(outputKind));
 	}
 

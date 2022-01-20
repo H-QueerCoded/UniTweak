@@ -39,12 +39,12 @@ public class Press {
 	}
 	
 	@ZenMethod
-	public static void add(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outputCount, @Optional(valueLong = 1) int inputCount) {
+	public static void addTemplate(String outputKind, String inputKind, IItemStack mold, int energy, @Optional(valueLong = 1) int outputCount, @Optional(valueLong = 1) int inputCount) {
 		CraftTweaker.LATE_ACTIONS.add(new Add(outputKind, inputKind, mold, energy, outputCount, inputCount));
 	}
 	
 	@ZenMethod
-	public static void remove(String outputKind) {
+	public static void removeTemplate(String outputKind) {
 		CraftTweaker.LATE_ACTIONS.add(new Remove(outputKind));
 	}
 	
