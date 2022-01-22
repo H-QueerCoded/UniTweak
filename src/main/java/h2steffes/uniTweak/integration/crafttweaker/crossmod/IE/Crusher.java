@@ -83,7 +83,6 @@ public class Crusher {
 				}
 				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
 				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
-				CraftTweakerAPI.logInfo("UniTweak: Adding crusher recipe for "+inputCount+" "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());
 				CrusherRecipe recipe = new CrusherRecipe(outputStack, CraftTweakerHelper.toObject(inputOreDictEntry.amount(inputCount)), energy);
 				if(secondaryOutput!=null)
 					recipe.addToSecondaryOutput(CraftTweakerHelper.toStack(secondaryOutput), (float)secondaryChance);
@@ -142,6 +141,10 @@ public class Crusher {
 			List<Resource> matchingResources = uniDictAPI.getResources(outputKindInt);
 			
 			for(Resource resource : matchingResources) {
+				if(resourcesToIgnore.contains(resource.getName())) {
+					CraftTweakerAPI.logInfo("UniTweak: Skipping resource "+resource.getName());
+					continue;
+				}
 				List<ItemStack> outputList = resource.getChild(outputKindInt).getEntries();
 				for (ItemStack output : outputList) {
 					CrusherRecipe.removeRecipesForOutput(output);

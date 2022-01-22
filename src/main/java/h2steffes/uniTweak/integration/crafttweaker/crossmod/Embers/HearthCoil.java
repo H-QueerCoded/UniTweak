@@ -65,7 +65,6 @@ public class HearthCoil {
 				}
 				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
 				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
-				CraftTweakerAPI.logInfo("UniTweak: Adding Embers Hearth Coil recipe for "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());
 				RecipeRegistry.heatCoilRecipes.add(new HeatCoilRecipe(outputStack, CraftTweakerMC.getIngredient(inputOreDictEntry)));
 			}
 			

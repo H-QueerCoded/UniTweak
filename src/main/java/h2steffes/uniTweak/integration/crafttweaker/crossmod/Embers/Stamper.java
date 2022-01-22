@@ -79,7 +79,7 @@ public class Stamper {
 					continue;
 				}
 				Fluid fluid = FluidRegistry.getFluid(resource.getName().toLowerCase());
-				CraftTweakerAPI.logInfo("UniTweak: Adding stamper recipe for "+liquidAmount+"mb of "+resource.getName()+" to "+outputSize+" "+outputStack.getDisplayName());
+				
 				RecipeRegistry.stampingRecipes.add(new ItemStampingRecipe(CTUtil.toIngredient(input),new FluidStack(fluid, liquidAmount),CTUtil.toIngredient(stamp),outputStack));
 			}
 		}
@@ -112,7 +112,6 @@ public class Stamper {
 				}
 				List<ItemStack> outputList = resource.getChild(outputKindInt).getEntries();
 				for (ItemStack output : outputList) {
-					CraftTweakerAPI.logInfo("UniTweak: Removing Stamper recipes with output "+output.getDisplayName());
 					RecipeRegistry.stampingRecipes.removeAll(getRecipesByOutput(output));
 				}
 			}

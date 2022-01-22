@@ -77,7 +77,7 @@ public class Press {
 				}
 				ItemStack outputStack = resource.getChild(outputKindInt).getMainEntry(outputCount);
 				IOreDictEntry inputOreDictEntry = ResourceHandling.getOreDictEntry(resource, inputKindInt);
-				CraftTweakerAPI.logInfo("UniTweak: Adding metal press recipe for "+inputCount+" "+inputOreDictEntry.getName()+" to "+outputStack.getCount()+" "+outputStack.getDisplayName());
+				
 				MetalPressRecipe.addRecipe(outputStack, CraftTweakerHelper.toObject(inputOreDictEntry.amount(inputCount)), mold, energy);
 			}
 		}
@@ -110,7 +110,7 @@ public class Press {
 				}
 				List<ItemStack> outputList = resource.getChild(outputKindString).getEntries();
 				for (ItemStack output : outputList) {
-					CraftTweakerAPI.logInfo("UniTweak: Removing Metal Press recipes with output "+output.getDisplayName());
+					
 					MetalPressRecipe.removeRecipes(output);
 				}
 			}

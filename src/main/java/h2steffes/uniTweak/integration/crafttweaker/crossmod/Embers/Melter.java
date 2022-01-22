@@ -113,7 +113,6 @@ public class Melter {
 				}
 				List<ItemStack> inputList = resource.getChild(inputKindInt).getEntries();
 				for (ItemStack input : inputList) {
-					CraftTweakerAPI.logInfo("UniTweak: Removing Embers Melter recipes with input "+input.getDisplayName());
 					RecipeRegistry.meltingRecipes.removeAll(getRecipesByInput(input));
 				}
 			}
